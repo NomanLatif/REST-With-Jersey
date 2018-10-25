@@ -5,8 +5,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -60,5 +62,31 @@ public class EmployeeService
 		}
 
 		return Response.created(new URI("/rest/employees/" + employee.getId())).build();
+	}
+
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateEmployeeById(@PathParam("id") Integer id, Employee e)
+	{
+		Employee updatedEmployee = new Employee();
+
+		if (e.getName() == null)
+		{
+			return Response.status(400).entity("Please provide the employee name !!").build();
+		}
+
+		updatedEmployee.setId(id);
+		updatedEmployee.setName(e.getName());
+
+		return Response.ok().entity(updatedEmployee).build();
+	}
+
+	@DELETE
+	@Path("/{id}")
+	public Response deleteEmployeeById(@PathParam("id") Integer id)
+	{
+		return Response.status(202).entity("Employee deleted successfully !!").build();
 	}
 }
